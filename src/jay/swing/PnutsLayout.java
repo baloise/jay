@@ -1,11 +1,3 @@
-/*
- * PnutsLayout.java
- *
- * Copyright (c) 1997-2006 Sun Microsystems, Inc. All Rights Reserved.
- *
- * See the file "LICENSE.txt" for information on usage and redistribution of this file, and for a DISCLAIMER OF ALL WARRANTIES.
- */
-
 package jay.swing;
 
 import java.awt.Component;
