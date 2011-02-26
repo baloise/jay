@@ -40,12 +40,10 @@ public class SensorIcon extends JComponent implements PropertyChangeListener {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-    if ((Long)evt.getNewValue() == 1) {
-      blender.blendTo(green);
-    }
-    else {
-      blender.blendTo(red);
-    }
+		if((Double)evt.getNewValue()>=1)
+			blender.blendTo(green);
+		else
+			blender.blendTo(red);
 	}
 
 	@Override

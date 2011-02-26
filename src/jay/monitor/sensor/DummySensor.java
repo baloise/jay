@@ -7,7 +7,7 @@ public class DummySensor extends AbstractSensor {
 	Random random = new Random(System.currentTimeMillis());
 	int delay=10;
 	float factor=1;
-  long value;
+	double value;
 
 	public DummySensor(String name) {
     super(name);
@@ -35,7 +35,7 @@ public class DummySensor extends AbstractSensor {
    * {@inheritDoc}
    */
   @Override
-  protected long sens() {
+  protected double sens() {
     return 0;
   }
 }

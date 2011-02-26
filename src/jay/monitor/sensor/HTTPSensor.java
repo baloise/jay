@@ -26,7 +26,7 @@ public class HTTPSensor extends AbstractSensor {
    * {@inheritDoc}
    */
   @Override
-  protected long sens() {
+  protected double sens() {
     try {
       HttpURLConnection con = (HttpURLConnection)url.openConnection();
       int responseCode = con.getResponseCode();

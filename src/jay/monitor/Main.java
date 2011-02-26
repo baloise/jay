@@ -50,8 +50,7 @@ public class Main implements PropertyChangeListener {
 
 		trayIcon.setImageAutoSize(true);
 		MouseListener mouseListener = new MouseAdapter() {
-			@Override
-      public void mousePressed(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				if (e.getButton() == 1) {
 					frame.autoHide.shiftVisibility();
 				}
@@ -83,24 +82,19 @@ public class Main implements PropertyChangeListener {
 		return popup;
 	}
 
-  /**
-   * @param args
-   *          the command line arguments
-   * @throws MalformedURLException
-   */
+	/**
+	 * @param args
+	 *            the command line arguments
+	 * @throws MalformedURLException 
+	 */
 	public static void main(String[] args) throws MalformedURLException {
 		Main main = new Main();
-    main.addSensor(new DummySensor("Parsys"));
-    main.addSensor(new DummySensor("DB2"));
-    main.addSensor(new HTTPSensor("x415265", "http://x415265.bvch.ch:880/memoryMonitor/"));
-    main.addSensor(new HTTPSensor("Goole", "http://www.google.com"));
+		main.addSensor(new DummySensor("Coucou"));
+		main.addSensor(new DummySensor("Heat"));
+		main.addSensor(new HTTPSensor("Google","http://www.google.com"));
 	}
 
-
 	public void addSensor(Sensor sensor) {
-    Thread thread = new Thread(sensor);
-    thread.setDaemon(true);
-    thread.start();
 		sensor.addPropertyChangeListener(this);
 		SensorUI ui = new DefaultSensorUI(sensor);
 		frame.add(ui.getLabel());
@@ -110,6 +104,9 @@ public class Main implements PropertyChangeListener {
 		if(isOk(sensor)){
 			sensorsThatHaveBeenOk.add(sensor);
 		}
+		Thread thread = new Thread(sensor);
+		thread.setDaemon(true);
+		thread.start();
 		setIconImage();
 	}
 
@@ -138,15 +135,12 @@ public class Main implements PropertyChangeListener {
 			}
 			return;
 		}
-		if(frame.isVisible()|| balloonDisabled ) {
-      return;
-    }
-		if(isOk(sensor)) {
-      trayIcon.displayMessage(sensor.getName()," went up",MessageType.INFO);
-    }
-    else {
-      trayIcon.displayMessage(sensor.getName()," went down",MessageType.WARNING);
-    }
+		if(frame.isVisible()|| balloonDisabled )
+			return;
+		if(isOk(sensor))
+			trayIcon.displayMessage(sensor.getName()," went up",MessageType.INFO);
+		else
+			trayIcon.displayMessage(sensor.getName()," went down",MessageType.WARNING);
 	}
 
 	private boolean initialisationFinished() {

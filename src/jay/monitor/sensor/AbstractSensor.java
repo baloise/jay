@@ -60,8 +60,9 @@ public abstract class AbstractSensor implements Sensor {
    */
   @Override
   public void run() {
-    long newValue = sens();
-    firePropertyChangeEvent(new PropertyChangeEvent(this, "value", value, newValue));
+    final double oldValue = value;
+    value = sens();
+	firePropertyChangeEvent(new PropertyChangeEvent(this, "value", oldValue, value));
     sleep();
   }
 
@@ -74,7 +75,7 @@ public abstract class AbstractSensor implements Sensor {
   }
 
 
-  protected abstract long sens();
+  protected abstract double sens();
 
   protected void sleep() {
     try {
