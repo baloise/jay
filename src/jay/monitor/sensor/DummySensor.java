@@ -1,6 +1,7 @@
 package jay.monitor.sensor;
 
 import java.beans.PropertyChangeEvent;
+import java.util.Properties;
 import java.util.Random;
 
 public class DummySensor extends AbstractSensor {
@@ -8,7 +9,13 @@ public class DummySensor extends AbstractSensor {
 	int delay=10;
 	float factor=1;
 	double value;
+	public DummySensor(Properties props) {
+	    this(props.getProperty("name", "Dummy"));
+	}
 
+	public DummySensor() {
+	    this("Dummy");
+	}
 	public DummySensor(String name) {
     super(name);
 	}
