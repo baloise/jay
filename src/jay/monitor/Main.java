@@ -59,7 +59,8 @@ public class Main implements PropertyChangeListener {
 
 		trayIcon.setImageAutoSize(true);
 		MouseListener mouseListener = new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
+			@Override
+      public void mousePressed(MouseEvent e) {
 				if (e.getButton() == 1) {
 					frame.autoHide.shiftVisibility();
 				}
@@ -212,19 +213,21 @@ public class Main implements PropertyChangeListener {
 		Sensor sensor = (Sensor) evt.getSource();
 		if (isOk(sensor) && !sensorsThatHaveBeenOk.contains(sensor)) {
 			sensorsThatHaveBeenOk.add(sensor);
-			if (initialisationFinished()) {
+      if (initialisationFinished() && frame.autoHide.getVisibility() == VISIBILITY.PERMANENTLY_VISIBLE) {
 				frame.autoHide.setVisibility(VISIBILITY.TEMPORARLY_VISIBLE);
 			}
-			return;
 		}
-		if (frame.isVisible() || balloonDisabled)
-			return;
-		if (isOk(sensor))
-			trayIcon.displayMessage(sensor.getName(), " went up",
+    if (frame.autoHide.getVisibility() != VISIBILITY.HIDDEN || balloonDisabled) {
+      return;
+    }
+		if (isOk(sensor)) {
+      trayIcon.displayMessage(sensor.getName(), " went up",
 					MessageType.INFO);
-		else
-			trayIcon.displayMessage(sensor.getName(), " went down",
+    }
+    else {
+      trayIcon.displayMessage(sensor.getName(), " went down",
 					MessageType.WARNING);
+    }
 	}
 
 	private boolean initialisationFinished() {

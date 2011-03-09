@@ -28,8 +28,8 @@ public class DummySensor extends AbstractSensor {
 			}
 			delay+=10;
 			factor *=1.2;
-      value = value + 1 % 2;
-      firePropertyChangeEvent(new PropertyChangeEvent(this, "sensor", value + 1 % 2, value));
+      value = (value + 1) % 2;
+      firePropertyChangeEvent(new PropertyChangeEvent(this, "sensor", (value + 1) % 2, value));
 		}
 	}
 
