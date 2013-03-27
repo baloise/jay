@@ -25,6 +25,7 @@ public class Frame extends FancyDialog67 implements ActionListener {
 	public final AutoHide autoHide;
 	private final Image pin;
 	private final AlphaBlender blender;
+	private final static boolean IS_MAC = System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0;
 	
 	public Frame() {
 		autoHide = new AutoHide(this,4500);
@@ -52,8 +53,13 @@ public class Frame extends FancyDialog67 implements ActionListener {
 		Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(
 				FancyFrame67.getTranslucencyCapableGC());
 		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((int) size.getWidth() - insets.right - getWidth(),
-				(int) size.getHeight() - insets.bottom - getHeight());
+		if(IS_MAC){
+			setLocation((int) size.getWidth() - insets.right - getWidth(),
+					insets.top);			
+		} else {
+			setLocation((int) size.getWidth() - insets.right - getWidth(),
+					(int) size.getHeight() - insets.bottom - getHeight());			
+		}
 	}
 	
 	@Override
