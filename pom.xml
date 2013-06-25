@@ -14,6 +14,32 @@
           <target>1.6</target>
         </configuration>
       </plugin>
+      
+      <plugin>
+        <groupId>org.codehaus.mojo.webstart</groupId>
+        <artifactId>webstart-maven-plugin</artifactId>
+        <version>1.0-alpha-2</version>
+        <executions>
+          <execution>
+            <id>jnlp</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jnlp-inline</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <excludeTransitive>true</excludeTransitive>
+          <unsignAlreadySignedJars>true</unsignAlreadySignedJars>
+        <!--  Default Settings for JNLP generation -->
+          <libPath>${deployName}</libPath>
+          <jnlp>
+            <inputTemplate>template.vm</inputTemplate>
+            <outputFile>jay.jnlp</outputFile>
+            <mainClass>jay.monitor.Main</mainClass>
+          </jnlp>
+        </configuration>
+      </plugin> 
     </plugins>
   </build>
 </project>
