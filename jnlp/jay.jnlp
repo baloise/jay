@@ -1,1 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?><jnlp spec="1.0+" codebase="http://baloise.github.io/jay/jnlp" href="jay.jnlp">    <information>        <title>Jay</title>        <vendor>Baloise</vendor>        <homepage href="http://www.baloise.ch"/>        <description>Jay tray application</description>                        <offline-allowed/>    </information>    <security>        <all-permissions/>    </security>    <resources>        <j2se version="1.6+" java-vm-args="-Xmx1024M -Xms512M"/>        <jar href="ch.basler.jay-0.0.1-SNAPSHOT.jar"/>    </resources>    <application-desc main-class="jay.monitor.Main">    </application-desc></jnlp>
+<!--
+#
+# JNLP File for Jay Tray Swingclient
+#
+ -->
+
+<jnlp spec="0.2 1.0" codebase="http://baloise.github.io/jay/jnlp" href="jay.jnlp">
+
+   <information>
+      <title>Jay</title>
+      <vendor>Basler Versicherungs-Gesellschaft</vendor>
+      <homepage href="http://www.baloise.ch"/>
+      <description>Jay is a tray application</description>
+      <offline-allowed>true</offline-allowed>
+   </information>
+
+   <security>
+      <all-permissions/>
+   </security>
+
+  <resources>
+        <j2se version="1.6" />
+        
+<jar href="ch.basler.jay-0.0.1-SNAPSHOT.jar" main="true"/>
+
+  </resources>
+
+  <application-desc main-class="jay.monitor.Main">
+  </application-desc>
+
+</jnlp>
