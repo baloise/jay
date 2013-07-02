@@ -15,6 +15,8 @@ This bulb would have the label Jay and the class DummySensor would implement the
 
 Use jay to build your own monitoring of whatever you want.
 
+Click [here](http://baloise.github.io/jay/jnlp/jay.jnlp) to run the demo.
+
 Some Screenshots
 ==========
 
