@@ -12,12 +12,6 @@ public class DummySensor extends AbstractSensor {
 	public DummySensor(Properties props) {
 	    super(props);
 	}
-	public DummySensor() {
-	    this("Dummy");
-	}
-	public DummySensor(String name) {
-    super(name);
-	}
 	
 	@Override
 	public void run() {

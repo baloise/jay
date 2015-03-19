@@ -6,21 +6,22 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Properties;
 
 
 public class HTTPSensor extends AbstractSensor {
 
-  private URL url;
-
-  public HTTPSensor(String name, String url) throws MalformedURLException {
-    super(name);
-    this.url = new URL(url);
-	}
-
-  public HTTPSensor(String aName, String url, long aDelay) throws MalformedURLException {
-    super(aName, aDelay);
-    this.url = new URL(url);
+  public HTTPSensor(Properties props) {
+    super(props);
+    try {
+      url = new URL(props.getProperty("url"));
+    }
+    catch (MalformedURLException e) {
+     throw new IllegalArgumentException(e);
+    }
   }
+
+  private URL url;
 
   /**
    * {@inheritDoc}

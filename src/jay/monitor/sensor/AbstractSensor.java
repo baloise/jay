@@ -43,23 +43,23 @@ public abstract class AbstractSensor implements Sensor {
   }
 
   public AbstractSensor(Properties props) {
-    this(props.getProperty("name"), Long.valueOf(props.getProperty("delay")));
-  }
-  
-  public AbstractSensor(String name) {
-    this(name, 10000);
-  }
-
-  public AbstractSensor(String name, long delay) {
-    this.name = name;
-    setDelay(delay);
+    this.name = props.getProperty("name");
+    if(name == null) {
+      name = getClass().getSimpleName();
+    }
+    try {
+      String tmp = props.getProperty("delay");
+      if(tmp != null) setDelay(Long.valueOf(tmp));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    if(getDelay()<0) {
+      throw new IllegalArgumentException("delay must be >= 0");
+    }
   }
 
   @Override
   public String getName() {
-    if(name == null) {
-      name = getClass().getSimpleName();
-    }
     return name;
   }
 
