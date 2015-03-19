@@ -2,6 +2,7 @@ package jay.monitor.sensor;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Properties;
 
 import javax.swing.event.EventListenerList;
 
@@ -41,17 +42,24 @@ public abstract class AbstractSensor implements Sensor {
     return getName() + ": " + getValue();
   }
 
+  public AbstractSensor(Properties props) {
+    this(props.getProperty("name"), Long.valueOf(props.getProperty("delay")));
+  }
+  
   public AbstractSensor(String name) {
     this(name, 10000);
   }
 
   public AbstractSensor(String name, long delay) {
     this.name = name;
-    this.delay = delay;
+    setDelay(delay);
   }
 
   @Override
   public String getName() {
+    if(name == null) {
+      name = getClass().getSimpleName();
+    }
     return name;
   }
 
@@ -60,10 +68,12 @@ public abstract class AbstractSensor implements Sensor {
    */
   @Override
   public void run() {
-    final double oldValue = value;
-    value = sens();
-	firePropertyChangeEvent(new PropertyChangeEvent(this, "value", oldValue, value));
-    sleep();
+    while(true) {
+      final double oldValue = value;
+      value = sens();
+      firePropertyChangeEvent(new PropertyChangeEvent(this, "value", oldValue, value));
+      sleep();
+    }
   }
 
   /**

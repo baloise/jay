@@ -10,15 +10,15 @@ public class DummySensor extends AbstractSensor {
 	float factor=1;
 	double value;
 	public DummySensor(Properties props) {
-	    this(props.getProperty("name", "Dummy"));
+	    super(props);
 	}
-
 	public DummySensor() {
 	    this("Dummy");
 	}
 	public DummySensor(String name) {
     super(name);
 	}
+	
 	@Override
 	public void run() {
 		while(true){
