@@ -151,6 +151,7 @@ public class Main implements PropertyChangeListener {
 				Constructor constructor = pluginClass.getConstructor(Properties.class);
 				plugin = constructor.newInstance(props);
 			} catch (Exception e) {
+				System.err.println(e.getMessage());
 				try {
 					plugin = pluginClass.newInstance();
 				} catch (Exception e1) {
