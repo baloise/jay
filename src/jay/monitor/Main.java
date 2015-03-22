@@ -1,5 +1,8 @@
 package jay.monitor;
 
+import static java.awt.Desktop.getDesktop;
+import static java.awt.Desktop.isDesktopSupported;
+
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -19,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.util.HashSet;
@@ -42,10 +46,8 @@ public class Main implements PropertyChangeListener {
 	public boolean balloonDisabled = false;
 
 	public Main() {
-		green = Toolkit.getDefaultToolkit().getImage(
-				"32px-Button_Icon_Green.svg.png");
-		red = Toolkit.getDefaultToolkit().getImage(
-				"32px-Button_Icon_Red.svg.png");
+		green = Toolkit.getDefaultToolkit().getImage("32px-Button_Icon_Green.svg.png");
+		red = Toolkit.getDefaultToolkit().getImage("32px-Button_Icon_Red.svg.png");
 		SystemTray tray = SystemTray.getSystemTray();
 
 		trayIcon = new TrayIcon(red, "Jay", createPopupMenu());
@@ -60,7 +62,7 @@ public class Main implements PropertyChangeListener {
 		trayIcon.setImageAutoSize(true);
 		MouseListener mouseListener = new MouseAdapter() {
 			@Override
-      public void mousePressed(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				if (e.getButton() == 1) {
 					frame.autoHide.shiftVisibility();
 				}
@@ -89,12 +91,26 @@ public class Main implements PropertyChangeListener {
 		MenuItem exitItem = new MenuItem("Exit");
 		exitItem.addActionListener(exitListener);
 		popup.add(exitItem);
+
+		if (isDesktopSupported()) {
+			ActionListener homeListener = new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						getDesktop().open(homeDir);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			};
+			MenuItem homeItem = new MenuItem("Home Directory");
+			homeItem.addActionListener(homeListener);
+			popup.add(homeItem);
+		}
+
 		return popup;
 	}
 
-	final static File homeDir = new File(System.getProperty("user.home")
-			+ File.separator + ".jay");
-
+	final static File homeDir = new File(System.getProperty("user.home") + File.separator + ".jay");
 
 	public static void main(String[] args) throws MalformedURLException {
 		homeDir.mkdirs();
@@ -132,8 +148,7 @@ public class Main implements PropertyChangeListener {
 			Class pluginClass = Class.forName(className);
 			Object plugin;
 			try {
-				Constructor constructor = pluginClass
-						.getConstructor(Properties.class);
+				Constructor constructor = pluginClass.getConstructor(Properties.class);
 				plugin = constructor.newInstance(props);
 			} catch (Exception e) {
 				try {
@@ -170,8 +185,7 @@ public class Main implements PropertyChangeListener {
 	private static void storeProps(Properties props, String name) {
 		try {
 			props.put("name", name);
-			props.store(new FileOutputStream(new File(homeDir, name + ".cfg")),
-					null);
+			props.store(new FileOutputStream(new File(homeDir, name + ".cfg")), null);
 		} catch (Exception e) {
 			handleException(e);
 		}
@@ -213,21 +227,18 @@ public class Main implements PropertyChangeListener {
 		Sensor sensor = (Sensor) evt.getSource();
 		if (isOk(sensor) && !sensorsThatHaveBeenOk.contains(sensor)) {
 			sensorsThatHaveBeenOk.add(sensor);
-      if (initialisationFinished() && frame.autoHide.getVisibility() == VISIBILITY.PERMANENTLY_VISIBLE) {
+			if (initialisationFinished() && frame.autoHide.getVisibility() == VISIBILITY.PERMANENTLY_VISIBLE) {
 				frame.autoHide.setVisibility(VISIBILITY.TEMPORARLY_VISIBLE);
 			}
 		}
-    if (frame.autoHide.getVisibility() != VISIBILITY.HIDDEN || balloonDisabled) {
-      return;
-    }
+		if (frame.autoHide.getVisibility() != VISIBILITY.HIDDEN || balloonDisabled) {
+			return;
+		}
 		if (isOk(sensor)) {
-      trayIcon.displayMessage(sensor.getName(), " went up",
-					MessageType.INFO);
-    }
-    else {
-      trayIcon.displayMessage(sensor.getName(), " went down",
-					MessageType.WARNING);
-    }
+			trayIcon.displayMessage(sensor.getName(), " went up", MessageType.INFO);
+		} else {
+			trayIcon.displayMessage(sensor.getName(), " went down", MessageType.WARNING);
+		}
 	}
 
 	private boolean initialisationFinished() {
