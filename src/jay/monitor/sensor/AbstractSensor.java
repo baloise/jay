@@ -7,90 +7,86 @@ import java.util.Properties;
 import javax.swing.event.EventListenerList;
 
 public abstract class AbstractSensor implements Sensor {
-  EventListenerList listeners = new EventListenerList();
-  private String name;
-  private long delay;
-  private double value;
+	EventListenerList listeners = new EventListenerList();
+	private String name;
+	/**
+	 * Delay between two sens() calls in msec. Default is 1000 = 1 sec.
+	 */
+	private long delay = 1000;
+	private double value;
 
-  /**
-   * @return das Attribut delay
-   */
-  public final long getDelay() {
-    return delay;
-  }
+	public final long getDelay() {
+		return delay;
+	}
 
-  /**
-   * @param aDelay
-   *          das Attribut delay das gesetzt wird
-   */
-  public final void setDelay(long aDelay) {
-    delay = aDelay;
-  }
+	public final void setDelay(long aDelay) {
+		delay = aDelay;
+	}
 
-  public void addPropertyChangeListener(PropertyChangeListener listener) {
-    listeners.add(PropertyChangeListener.class, listener);
-  }
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		listeners.add(PropertyChangeListener.class, listener);
+	}
 
-  void firePropertyChangeEvent(PropertyChangeEvent event) {
-    for (PropertyChangeListener listener : listeners.getListeners(PropertyChangeListener.class)) {
-      listener.propertyChange(event);
-    }
-  }
+	void firePropertyChangeEvent(PropertyChangeEvent event) {
+		for (PropertyChangeListener listener : listeners.getListeners(PropertyChangeListener.class)) {
+			listener.propertyChange(event);
+		}
+	}
 
-  @Override
-  public String toString() {
-    return getName() + ": " + getValue();
-  }
+	@Override
+	public String toString() {
+		return getName() + ": " + getValue();
+	}
 
-  public AbstractSensor(Properties props) {
-    this.name = props.getProperty("name");
-    if(name == null) {
-      name = getClass().getSimpleName();
-    }
-    try {
-      String tmp = props.getProperty("delay");
-      if(tmp != null) setDelay(Long.valueOf(tmp));
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    if(getDelay()<0) {
-      throw new IllegalArgumentException("delay must be >= 0");
-    }
-  }
+	public AbstractSensor(Properties props) {
+		this.name = props.getProperty("name");
+		if (name == null) {
+			name = getClass().getSimpleName();
+		}
+		try {
+			String tmp = props.getProperty("delay");
+			if (tmp != null)
+				setDelay(Long.valueOf(tmp));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (getDelay() < 0) {
+			throw new IllegalArgumentException("delay must be >= 0");
+		}
+	}
 
-  @Override
-  public String getName() {
-    return name;
-  }
+	@Override
+	public String getName() {
+		return name;
+	}
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void run() {
-    while(true) {
-      final double oldValue = value;
-      value = sens();
-      firePropertyChangeEvent(new PropertyChangeEvent(this, "value", oldValue, value));
-      sleep();
-    }
-  }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void run() {
+		while (true) {
+			final double oldValue = value;
+			value = sens();
+			firePropertyChangeEvent(new PropertyChangeEvent(this, "value", oldValue, value));
+			sleep();
+		}
+	}
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public double getValue() {
-    return value;
-  }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public double getValue() {
+		return value;
+	}
 
+	protected abstract double sens();
 
-  protected abstract double sens();
-
-  protected void sleep() {
-    try {
-      Thread.sleep(delay);
-    }
-    catch (InterruptedException e) {}
-  }
+	protected void sleep() {
+		try {
+			Thread.sleep(delay);
+		} catch (InterruptedException e) {
+		}
+	}
 }
