@@ -10,9 +10,9 @@ public abstract class AbstractSensor implements Sensor {
 	EventListenerList listeners = new EventListenerList();
 	private String name;
 	/**
-	 * Delay between two sens() calls in msec. Default is 1000 = 1 sec.
+	 * Delay between two sens() calls in msec. Default is 60000 = 1 min.
 	 */
-	private long delay = 1000;
+	private long delay = 60000;
 	private double value;
 
 	public final long getDelay() {
