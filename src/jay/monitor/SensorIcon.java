@@ -2,56 +2,39 @@ package jay.monitor;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JComponent;
 
 import jay.monitor.sensor.Sensor;
-import jay.swing.ImageBlender;
+import jay.swing.DropShadowPanel;
+import jay.swing.TrafficLightIcon;
 
 public class SensorIcon extends JComponent implements PropertyChangeListener {
 
 	protected final Sensor sensor;
-	final Image red, green;
-	Image current;
 	final Dimension dim = new Dimension(64, 64);
-	private ImageBlender blender;
+	private TrafficLightIcon icon = new TrafficLightIcon(48);
+	private DropShadowPanel dsp = new DropShadowPanel(icon.getImage());
 
 	public SensorIcon(Sensor sensor) {
-		green = Toolkit.getDefaultToolkit().getImage(
-				"32px-Button_Icon_Green.svg.drop.png");
-		red = Toolkit.getDefaultToolkit().getImage(
-				"32px-Button_Icon_Red.svg.drop.png");
-		current = red;
 		this.sensor = sensor;
 		sensor.addPropertyChangeListener(this);
-		blender = new ImageBlender(red, this) {			
-			@Override
-			protected void update(Image image) {
-				current = image;
-				repaint();
-			}
-		};
+		icon.setPercentage(100);
+		dsp.setSize(64, 64);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if((Double)evt.getNewValue()>=1)
-			blender.blendTo(green);
-		else
-			blender.blendTo(red);
+		icon.blendToPercentage((int) (100 - 100D * (Double) evt.getNewValue()));
 	}
 
 	@Override
 	public void paint(Graphics g) {
-		Graphics2D g2d = (Graphics2D) g;
-		int dx = (getWidth() - 32) / 2;
-		int dy = (getHeight() - 32) / 2;
-		g2d.drawImage(current, dx, dy, this);
+		dsp.setSubject(icon.getImage());
+		dsp.paintComponent(g);
+		// icon.paintIcon(this, g, 0, 0);
 	}
 
 	@Override
@@ -63,7 +46,7 @@ public class SensorIcon extends JComponent implements PropertyChangeListener {
 	public Dimension getMaximumSize() {
 		return dim;
 	}
-	
+
 	@Override
 	public Dimension getPreferredSize() {
 		return this.getMinimumSize();

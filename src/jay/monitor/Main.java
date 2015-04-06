@@ -4,11 +4,9 @@ import static java.awt.Desktop.getDesktop;
 import static java.awt.Desktop.isDesktopSupported;
 
 import java.awt.AWTException;
-import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
-import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
@@ -33,7 +31,7 @@ import jay.monitor.AutoHide.VISIBILITY;
 import jay.monitor.sensor.DummySensor;
 import jay.monitor.sensor.Sensor;
 import jay.swing.ExceptionDialog;
-import jay.swing.ImageBlender;
+import jay.swing.TrafficLightIcon;
 
 public class Main implements PropertyChangeListener {
 	private static final String CLASS = "class";
@@ -41,23 +39,21 @@ public class Main implements PropertyChangeListener {
 	final TrayIcon trayIcon;
 	final private Set<SensorUI> sensorUIs = new HashSet<SensorUI>();
 	final private Set<Sensor> sensorsThatHaveBeenOk = new HashSet<Sensor>();
-	final Image red, green;
-	final ImageBlender blender;
+	final TrafficLightIcon trafficLight = new TrafficLightIcon(64);
 	public boolean balloonDisabled = false;
 
 	public Main() {
-		green = Toolkit.getDefaultToolkit().getImage("32px-Button_Icon_Green.svg.png");
-		red = Toolkit.getDefaultToolkit().getImage("32px-Button_Icon_Red.svg.png");
 		SystemTray tray = SystemTray.getSystemTray();
-
-		trayIcon = new TrayIcon(red, "Jay", createPopupMenu());
-		blender = new ImageBlender(red, null) {
+		trafficLight.setPercentage(36);
+		trafficLight.setMargin(8);
+		trayIcon = new TrayIcon(trafficLight.getImage(), "Jay", createPopupMenu());
+		trafficLight.getBlender().addPropertyChangeListener(new PropertyChangeListener() {
 
 			@Override
-			protected void update(Image image) {
-				trayIcon.setImage(image);
+			public void propertyChange(PropertyChangeEvent evt) {
+				trayIcon.setImage(trafficLight.getImage());
 			}
-		};
+		});
 
 		trayIcon.setImageAutoSize(true);
 		MouseListener mouseListener = new MouseAdapter() {
@@ -215,13 +211,11 @@ public class Main implements PropertyChangeListener {
 	}
 
 	public void setIconImage() {
+		double max = 0;
 		for (SensorUI ui : sensorUIs) {
-			if (!isOk(ui.getSensor())) {
-				blender.blendTo(red);
-				return;
-			}
+			max = Math.max(0, ui.getSensor().getValue());
 		}
-		blender.blendTo(green);
+		trafficLight.blendToPercentage((int) (100 - 100D * max));
 	}
 
 	private void showBalloon(PropertyChangeEvent evt) {
@@ -247,6 +241,6 @@ public class Main implements PropertyChangeListener {
 	}
 
 	private static boolean isOk(Sensor sensor) {
-		return sensor.getValue() > 0;
+		return sensor.getValue() > 0.7;
 	}
 }
