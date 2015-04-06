@@ -8,6 +8,7 @@ public class DummySensor extends AbstractSensor {
 
 	public DummySensor(Properties props) {
 		super(props);
+		setDelay(1000);
 	}
 
 	/**
@@ -18,6 +19,6 @@ public class DummySensor extends AbstractSensor {
 		if (getDelay() < 30000) {
 			setDelay(random.nextInt(2000) + getDelay());
 		}
-		return (getValue() + 1) % 2;
+		return random.nextDouble();
 	}
 }
