@@ -14,9 +14,14 @@ public class JenkinsSensor extends AbstractSensor {
 
   @Override
   protected double sens() {
-    System.out.println("Update jekins");
     jenkins.update();
-    return Color.green.equals(jenkins.color) ? 1 : 0;
+    if(Color.green.equals(jenkins.color)) {
+      return 0;
+    } else  if(Color.yellow.equals(jenkins.color)) {
+      return 0.5;
+    } else  {
+      return 1;
+    }
   }
 
 }
