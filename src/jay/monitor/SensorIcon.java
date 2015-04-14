@@ -2,6 +2,10 @@ package jay.monitor;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -14,6 +18,18 @@ import jay.swing.TrafficLightIcon;
 public class SensorIcon extends JComponent implements PropertyChangeListener {
 
 	protected final Sensor sensor;
+	protected final MouseListener mouseListener = new MouseAdapter() {
+	  @Override
+	  public void mouseClicked(MouseEvent e) {
+	    if(e.getClickCount() == 2) {
+	      if(sensor instanceof ActionListener) {
+	        ActionListener al = (ActionListener) sensor;
+	        al.actionPerformed(null);
+	      }
+	    }
+	  }
+  };
+  
 	final Dimension dim = new Dimension(64, 64);
 	private TrafficLightIcon icon = new TrafficLightIcon(48).setComponent(this);
 	private DropShadowPanel dsp = new DropShadowPanel(icon.getImage());
@@ -23,6 +39,7 @@ public class SensorIcon extends JComponent implements PropertyChangeListener {
 		sensor.addPropertyChangeListener(this);
 		icon.setPercentage(100);
 		dsp.setSize(64, 64);
+		this.addMouseListener(mouseListener);
 	}
 
 	@Override
