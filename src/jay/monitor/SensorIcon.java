@@ -15,7 +15,7 @@ public class SensorIcon extends JComponent implements PropertyChangeListener {
 
 	protected final Sensor sensor;
 	final Dimension dim = new Dimension(64, 64);
-	private TrafficLightIcon icon = new TrafficLightIcon(48);
+	private TrafficLightIcon icon = new TrafficLightIcon(48).setComponent(this);
 	private DropShadowPanel dsp = new DropShadowPanel(icon.getImage());
 
 	public SensorIcon(Sensor sensor) {

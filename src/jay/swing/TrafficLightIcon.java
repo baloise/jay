@@ -213,4 +213,9 @@ public class TrafficLightIcon implements javax.swing.Icon {
 		if (component != null)
 			component.repaint();
 	}
+
+  public TrafficLightIcon setComponent(Component component) {
+    this.component= component; 
+    return this;
+  }
 }
