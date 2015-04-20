@@ -26,7 +26,8 @@ public class Jenkins {
     update();
   }
 
-  public void update() {
+  public synchronized void update() {
+    colorCode = -1;
     for(String color : getColors()) {
       evaluateColor(color);
     }
@@ -51,7 +52,7 @@ public class Jenkins {
   final int    red_anime =   red+6;
   // end dirty hack
   
-  private void evaluateColor(String colorString) {
+  private synchronized void evaluateColor(String colorString) {
           switch (colorString.length()) {
             case blue :
               colorCode = Math.max(colorCode,0);
@@ -78,7 +79,7 @@ public class Jenkins {
           color = colors[colorCode];
   }
 
-  private Set<String> getColors() {
+  private synchronized Set<String> getColors() {
     Set<String> ret = new HashSet<String>();
     final String regEx = "<color>(\\w+)</color>";
     Pattern pattern = Pattern.compile(regEx);
