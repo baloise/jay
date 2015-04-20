@@ -28,11 +28,11 @@ public class JenkinsSensor extends AbstractSensor implements ActionListener {
   protected double sens() {
     jenkins.update();
     if(Color.green.equals(jenkins.color)) {
-      return 0;
+      return 1;
     } else  if(Color.yellow.equals(jenkins.color)) {
       return 0.5;
     } else  {
-      return 1;
+      return 0;
     }
   }
 
