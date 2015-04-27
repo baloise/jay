@@ -23,8 +23,7 @@ public class SensorIcon extends JComponent implements PropertyChangeListener {
 	  public void mouseClicked(MouseEvent e) {
 	    if(e.getClickCount() == 2) {
 	      if(sensor instanceof ActionListener) {
-	        ActionListener al = (ActionListener) sensor;
-	        al.actionPerformed(null);
+	        ((ActionListener) sensor).actionPerformed(null);
 	      }
 	    }
 	  }
