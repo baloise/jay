@@ -68,7 +68,8 @@ public abstract class AbstractSensor implements Sensor {
 		while (true) {
 			final double oldValue = value;
 			value = sens();
-			firePropertyChangeEvent(new PropertyChangeEvent(this, "value", oldValue, value));
+			if(value != oldValue) 
+			  firePropertyChangeEvent(new PropertyChangeEvent(this, "value", oldValue, value));
 			sleep();
 		}
 	}
