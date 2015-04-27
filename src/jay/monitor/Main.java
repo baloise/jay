@@ -4,6 +4,8 @@ import static java.awt.Desktop.getDesktop;
 import static java.awt.Desktop.isDesktopSupported;
 
 import java.awt.AWTException;
+import java.awt.CheckboxMenuItem;
+import java.awt.Font;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
@@ -11,6 +13,8 @@ import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -41,12 +45,17 @@ public class Main implements PropertyChangeListener {
 	final private Set<Sensor> sensorsThatHaveBeenOk = new HashSet<Sensor>();
 	final TrafficLightIcon trafficLight = new TrafficLightIcon(64);
 	public boolean balloonDisabled = false;
+  private PopupMenu popupMenu;
+  private MenuItem exitItem;
+  private MenuItem homeItem;
+  private MenuItem seperatorItem = new MenuItem("-");
 
 	public Main() {
 		SystemTray tray = SystemTray.getSystemTray();
 		trafficLight.setPercentage(36);
 		trafficLight.setMargin(8);
-		trayIcon = new TrayIcon(trafficLight.getImage(), "Jay", createPopupMenu());
+		popupMenu = createPopupMenu();
+    trayIcon = new TrayIcon(trafficLight.getImage(), "Jay", popupMenu);
 		trafficLight.getBlender().addPropertyChangeListener(new PropertyChangeListener() {
 
 			@Override
@@ -84,7 +93,7 @@ public class Main implements PropertyChangeListener {
 		};
 
 		PopupMenu popup = new PopupMenu();
-		MenuItem exitItem = new MenuItem("Exit");
+		exitItem = new MenuItem("Exit");
 		exitItem.addActionListener(exitListener);
 		popup.add(exitItem);
 
@@ -98,7 +107,7 @@ public class Main implements PropertyChangeListener {
 					}
 				}
 			};
-			MenuItem homeItem = new MenuItem("Home Directory");
+			homeItem = new MenuItem("Home Directory");
 			homeItem.addActionListener(homeListener);
 			popup.add(homeItem);
 		}
@@ -188,7 +197,7 @@ public class Main implements PropertyChangeListener {
 		}
 	}
 
-	public void addSensor(Sensor sensor) {
+	public void addSensor(final Sensor sensor) {
 		sensor.addPropertyChangeListener(this);
 		SensorUI ui = new DefaultSensorUI(sensor);
 		frame.add(ui.getLabel());
@@ -202,6 +211,35 @@ public class Main implements PropertyChangeListener {
 		thread.setDaemon(true);
 		thread.start();
 		setIconImage();
+		final CheckboxMenuItem menuItem = new CheckboxMenuItem(sensor.getName());
+    popupMenu.add(menuItem);
+    final PropertyChangeListener stateListener = new PropertyChangeListener() {
+      Font font;
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        boolean ok = sensor.getValue() > 0.9999D;
+        menuItem.setState(ok);
+        if(font == null) {
+          font = menuItem.getFont();
+        } 
+        if(font != null) {
+          menuItem.setFont(ok ? font : font.deriveFont(Font.ITALIC));
+        }
+      }
+    };
+    menuItem.addItemListener(new ItemListener() {
+      @Override
+      public void itemStateChanged(ItemEvent e) {
+        stateListener.propertyChange(null);
+        if(sensor instanceof ActionListener) {
+          ((ActionListener) sensor).actionPerformed(null);
+        }
+      }
+    });
+    sensor.addPropertyChangeListener(stateListener);
+    popupMenu.add(seperatorItem);
+    popupMenu.add(homeItem);
+    popupMenu.add(exitItem);
 	}
 
 	@Override
