@@ -49,6 +49,7 @@ public class Main implements PropertyChangeListener {
   private MenuItem exitItem;
   private MenuItem homeItem;
   private MenuItem seperatorItem = new MenuItem("-");
+  private boolean hideAfterInitialisation = System.getProperty("pin") == null;
 
 	public Main() {
 		SystemTray tray = SystemTray.getSystemTray();
@@ -260,7 +261,7 @@ public class Main implements PropertyChangeListener {
 		Sensor sensor = (Sensor) evt.getSource();
 		if (isOk(sensor) && !sensorsThatHaveBeenOk.contains(sensor)) {
 			sensorsThatHaveBeenOk.add(sensor);
-			if (initialisationFinished() && frame.autoHide.getVisibility() == VISIBILITY.PERMANENTLY_VISIBLE) {
+			if (initialisationFinished() && hideAfterInitialisation && frame.autoHide.getVisibility() == VISIBILITY.PERMANENTLY_VISIBLE) {
 				frame.autoHide.setVisibility(VISIBILITY.TEMPORARLY_VISIBLE);
 			}
 		}
