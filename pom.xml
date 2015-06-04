@@ -3,6 +3,9 @@
   <groupId>jay</groupId>
   <artifactId>ch.basler.jay</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  	<properties>
+		<exec.mainClass>jay.monitor.Main</exec.mainClass>
+	</properties>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
@@ -36,7 +39,7 @@
           <jnlp>
             <inputTemplate>template.vm</inputTemplate>
             <outputFile>jay.jnlp</outputFile>
-            <mainClass>jay.monitor.Main</mainClass>
+            <mainClass>${exec.mainClass}</mainClass>
           </jnlp>
         </configuration>
       </plugin> 
