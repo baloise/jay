@@ -1,9 +1,11 @@
 package jay.monitor.sensor;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Properties;
 import java.util.Random;
 
-public class DummySensor extends AbstractSensor {
+public class DummySensor extends AbstractSensor implements ActionListener{
 	Random random = new Random(System.currentTimeMillis());
 
 	public DummySensor(Properties props) {
@@ -21,4 +23,9 @@ public class DummySensor extends AbstractSensor {
 		}
 		return random.nextDouble();
 	}
+	
+	@Override
+  public void actionPerformed(ActionEvent e) {
+    Thread.currentThread().interrupt();
+  }
 }
