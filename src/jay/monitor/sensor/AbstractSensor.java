@@ -6,8 +6,7 @@ import java.util.Properties;
 
 import javax.swing.event.EventListenerList;
 
-public abstract class AbstractSensor implements Sensor {
-	EventListenerList listeners = new EventListenerList();
+public abstract class AbstractSensor extends PropertyChangeSupport implements Sensor {
 	private String name;
 	/**
 	 * Delay between two sens() calls in msec. Default is 60000 = 1 min.
@@ -21,16 +20,6 @@ public abstract class AbstractSensor implements Sensor {
 
 	public final void setDelay(long aDelay) {
 		delay = aDelay;
-	}
-
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		listeners.add(PropertyChangeListener.class, listener);
-	}
-
-	void firePropertyChangeEvent(PropertyChangeEvent event) {
-		for (PropertyChangeListener listener : listeners.getListeners(PropertyChangeListener.class)) {
-			listener.propertyChange(event);
-		}
 	}
 
 	@Override
