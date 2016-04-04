@@ -18,4 +18,8 @@ public abstract class PropertyChangeSupport {
 		}
 	}
 
+	PropertyChangeEvent createValueChangedEvent(final double oldValue, final double newValue) {
+		return new PropertyChangeEvent(this, "value", oldValue, newValue);
+	}
+	
 }

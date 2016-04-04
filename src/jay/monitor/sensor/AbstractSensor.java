@@ -58,7 +58,7 @@ public abstract class AbstractSensor extends PropertyChangeSupport implements Se
 			final double oldValue = value;
 			value = sens();
 			if(value != oldValue) 
-			  firePropertyChangeEvent(new PropertyChangeEvent(this, "value", oldValue, value));
+			  firePropertyChangeEvent(createValueChangedEvent(oldValue, value));
 			sleep();
 		}
 	}
