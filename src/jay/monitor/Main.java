@@ -39,24 +39,26 @@ import jay.swing.TrafficLightIcon;
 
 public class Main implements PropertyChangeListener {
 	private static final String CLASS = "class";
+	final static File homeDir = new File(System.getProperty("user.home") + File.separator + ".jay");
 	final Frame frame = new Frame();
 	final TrayIcon trayIcon;
 	final private Set<SensorUI> sensorUIs = new HashSet<SensorUI>();
 	final private Set<Sensor> sensorsThatHaveBeenOk = new HashSet<Sensor>();
 	final TrafficLightIcon trafficLight = new TrafficLightIcon(64);
 	public boolean balloonDisabled = false;
-  private PopupMenu popupMenu;
-  private MenuItem exitItem;
-  private MenuItem homeItem;
-  private MenuItem seperatorItem = new MenuItem("-");
-  private boolean hideAfterInitialisation = System.getProperty("pin") == null;
+    private PopupMenu popupMenu;
+    private MenuItem exitItem;
+    private MenuItem homeItem;
+    private MenuItem seperatorItem = new MenuItem("-");
+    private boolean hideAfterInitialisation = System.getProperty("pin") == null;
+	private final ClassLoader classLoader = new JarFileLoader().withLibDir(homeDir);
 
 	public Main() {
 		SystemTray tray = SystemTray.getSystemTray();
 		trafficLight.setPercentage(36);
 		trafficLight.setMargin(8);
 		popupMenu = createPopupMenu();
-    trayIcon = new TrayIcon(trafficLight.getImage(), "Jay", popupMenu);
+		trayIcon = new TrayIcon(trafficLight.getImage(), "Jay", popupMenu);
 		trafficLight.getBlender().addPropertyChangeListener(new PropertyChangeListener() {
 
 			@Override
@@ -116,7 +118,6 @@ public class Main implements PropertyChangeListener {
 		return popup;
 	}
 
-	final static File homeDir = new File(System.getProperty("user.home") + File.separator + ".jay");
 
 	public static void main(String[] args) throws MalformedURLException {
 		homeDir.mkdirs();
@@ -139,7 +140,7 @@ public class Main implements PropertyChangeListener {
 			}
 		});
 	}
-
+	
 	private void loadConfig(File cfgFile) {
 		System.out.println("Loading " + cfgFile.getAbsolutePath());
 		Properties props = new Properties();
@@ -151,7 +152,7 @@ public class Main implements PropertyChangeListener {
 		}
 		String className = props.getProperty(CLASS);
 		try {
-			Class pluginClass = Class.forName(className);
+			Class pluginClass = classLoader.loadClass(className);
 			Object plugin;
 			try {
 				Constructor constructor = pluginClass.getConstructor(Properties.class);
