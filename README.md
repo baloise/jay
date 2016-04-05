@@ -25,25 +25,10 @@ Use jay to build your own monitoring of whatever you want.
 ## Download the binary. 
 You can look up the current jay version at https://jitpack.io/com/github/baloise/jay/-SNAPSHOT/maven-metadata.xml
 ```
-@echo off
-echo    __  __  _  _ 
-echo  _(  )/ _\( \/ )
-echo / \) /    \)  / 
-echo \____\_/\_(__/  
-echo.
+powershell -Command "$proxy = [System.Net.WebRequest]::GetSystemWebProxy();$proxy.Credentials = [System.Net.CredentialCache]::DefaultCredentials;$wc = new-object system.net.WebClient;$wc.proxy = $proxy;$wc.DownloadFile('https://raw.githubusercontent.com/baloise/jay/master/install.bat', 'install_jay.bat');"
+install_jay.bat
+del install_jay.bat
 
-set JAY_VERSION=-v0.1.0-gf3c655f-2
-call:download "https://jitpack.io/com/github/baloise/jay/%JAY_VERSION%/jay-%JAY_VERSION%.jar" "%USERPROFILE%/jay.jar"
-
-::--------------------------------------------------------
-::-- Functions
-::--------------------------------------------------------
-goto:eof
-
-:download
-	echo downloading %~2
-	powershell -Command "$proxy = [System.Net.WebRequest]::GetSystemWebProxy();$proxy.Credentials = [System.Net.CredentialCache]::DefaultCredentials;$wc = new-object system.net.WebClient;$wc.proxy = $proxy;$wc.DownloadFile('%~1', '%~2');"
-goto:eof
 ```
 
 ## Create start up item
