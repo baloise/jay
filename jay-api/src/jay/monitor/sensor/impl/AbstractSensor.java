@@ -31,7 +31,7 @@ public abstract class AbstractSensor implements Sensor, Configurable {
 	}
 	
 	public void setValue(double value) {
-		final double oldValue = value;
+		final double oldValue = this.value;
 		this.value = value;
 		propertyChange.firePropertyChange("value", oldValue, value);		
 	}
