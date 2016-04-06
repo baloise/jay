@@ -20,6 +20,6 @@ Click [here](http://baloise.github.io/jay/jnlp/jay.jnlp) to run the demo.
 Some Screenshots
 ==========
 
-![Traffic light](images/jaylights.PNG)
+![Traffic light](screenshots/jaylights.PNG)
 
-![Jay message](images/jaytray.PNG)
+![Jay message](screenshots/jaytray.PNG)
