@@ -5,8 +5,8 @@ echo / \) /    \)  /
 echo \____\_/\_(__/  
 echo.
 
-set JAY_VERSION=-v0.1.0-gf3c655f-2
-call:download "https://jitpack.io/com/github/baloise/jay/%JAY_VERSION%/jay-%JAY_VERSION%.jar" "%USERPROFILE%/jay.jar"
+set JAY_VERSION=-v0.1.0-ge86d69d-7
+call:download "https://jitpack.io/com/github/baloise/jay/jay/%JAY_VERSION%/jay-%JAY_VERSION%.jar" "%USERPROFILE%/jay.jar"
 
 ::--------------------------------------------------------
 ::-- Functions

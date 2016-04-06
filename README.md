@@ -23,7 +23,7 @@ Use jay to build your own monitoring of whatever you want.
 
 # Installation on Windows
 ## Download the binary. 
-You can look up the current jay version at https://jitpack.io/com/github/baloise/jay/-SNAPSHOT/maven-metadata.xml
+You can look up the current jay version at https://jitpack.io/com/github/baloise/jay/jay/-SNAPSHOT/maven-metadata.xml
 ```
 powershell -Command "$proxy = [System.Net.WebRequest]::GetSystemWebProxy();$proxy.Credentials = [System.Net.CredentialCache]::DefaultCredentials;$wc = new-object system.net.WebClient;$wc.proxy = $proxy;$wc.DownloadFile('https://raw.githubusercontent.com/baloise/jay/master/install.bat', 'install_jay.bat');"
 install_jay.bat
