@@ -1,52 +1,39 @@
 package jay.monitor.sensor;
 
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Properties;
 
-public class JenkinsSensor extends AbstractSensor implements ActionListener {
+import jay.monitor.sensor.impl.AbstractPollingSensor;
 
-  Jenkins jenkins;
-  private URI uri;
-  
-  public JenkinsSensor(Properties props) {
-    super(props);
-    try {
-      uri = new URI(props.getProperty("url"));
-    }
-    catch (URISyntaxException e) {
-      e.printStackTrace();
-    }
-    jenkins = Jenkins.getState(props.getProperty("url"));
-  }
+public class JenkinsSensor extends AbstractPollingSensor implements ActionListener {
 
-  @Override
-  protected double sens() {
-    jenkins.update();
-    if(Color.green.equals(jenkins.color)) {
-      return 1;
-    } else  if(Color.yellow.equals(jenkins.color)) {
-      return 0.5;
-    } else  {
-      return 0;
-    }
-  }
+	Jenkins jenkins;
+	private URLSupport url;
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
-        try {
-            desktop.browse(uri);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-    
-  }
+	@Override
+	public void configure(Properties props) {
+		super.configure(props);
+		url.configure(props);
+		jenkins = new Jenkins(url.getUrl());
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		url.actionPerformed(e);
+	}
+
+	@Override
+	protected double poll() {
+		jenkins.update();
+		if (Color.green.equals(jenkins.color)) {
+			return 1;
+		} else if (Color.yellow.equals(jenkins.color)) {
+			return 0.5;
+		} else {
+			return 0;
+		}
+	}
 
 }

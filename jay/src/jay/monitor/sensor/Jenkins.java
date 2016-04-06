@@ -16,7 +16,7 @@ public class Jenkins {
   public final URL url;
 
 
-  private Jenkins(String url) {
+  public Jenkins(URL url) {
     try {
       this.url = new URL(url+"/api/xml");
     }
@@ -99,9 +99,5 @@ public class Jenkins {
     }
     return ret;
   }
-
-  public static Jenkins getState(String url) {
-    return new Jenkins(url);
-  }
-
+ 
 }

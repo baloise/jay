@@ -1,56 +1,43 @@
 package jay.monitor.sensor;
 
-import java.io.BufferedReader;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Properties;
 
+import jay.monitor.sensor.impl.AbstractPollingSensor;
 
-public class HTTPSensor extends AbstractSensor {
+public class HTTPSensor extends AbstractPollingSensor implements ActionListener {
+	private URLSupport url;
 
-  public HTTPSensor(Properties props) {
-    super(props);
-    try {
-      url = new URL(props.getProperty("url"));
-    }
-    catch (MalformedURLException e) {
-     throw new IllegalArgumentException(e);
-    }
-  }
+	@Override
+	public void configure(Properties props) {
+		super.configure(props);
+		url.configure(props);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		url.actionPerformed(e);
+	}
 
-  private URL url;
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected double poll() {
+		try {
+			HttpURLConnection con = (HttpURLConnection) url.getUrl().openConnection();
+			int responseCode = con.getResponseCode();
+			if (200 > responseCode || responseCode >= 300) {
+				return 0;
+			}
+		} catch (IOException e) {
+			return 0;
+		}
+		return 1;
+	}
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected double sens() {
-    try {
-      HttpURLConnection con = (HttpURLConnection)url.openConnection();
-      int responseCode = con.getResponseCode();
-      if (200 > responseCode || responseCode >= 300) {
-        return 0;
-      }
-    }
-    catch (IOException e) {
-      return 0;
-    }
-    return 1;
-  }
-
-  public String readUrl() throws IOException {
-    BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-    String inputLine;
-    StringBuffer ret = new StringBuffer();
-    while ((inputLine = in.readLine()) != null) {
-      ret.append(inputLine);
-      ret.append("\n");
-    }
-    in.close();
-    return ret.toString();
-  }
 
 }

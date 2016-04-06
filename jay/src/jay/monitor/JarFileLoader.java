@@ -35,4 +35,14 @@ public class JarFileLoader extends URLClassLoader {
 		}
 		return this;
 	}
+	
+	public static void main(String[] args) throws ClassNotFoundException {
+		new JarFileLoader().withLibDir(new File("C:\\Users\\b028178\\.jay")).loadClass("jay.monitor.sensor.RockySensor");
+		//new JarFileLoader().withFile("C:\\Users\\b028178\\jay.jar").loadClass("jay.monitor.Main");
+		
+	}
+	@Override
+	public Class<?> loadClass(String name) throws ClassNotFoundException {
+		return super.loadClass(name);
+	}
 }

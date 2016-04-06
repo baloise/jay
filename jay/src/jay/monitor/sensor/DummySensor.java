@@ -2,14 +2,14 @@ package jay.monitor.sensor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Properties;
 import java.util.Random;
 
-public class DummySensor extends AbstractSensor implements ActionListener{
+import jay.monitor.sensor.impl.AbstractPollingSensor;
+
+public class DummySensor extends AbstractPollingSensor implements ActionListener {
 	Random random = new Random(System.currentTimeMillis());
 
-	public DummySensor(Properties props) {
-		super(props);
+	public DummySensor() {
 		setDelay(1000);
 	}
 
@@ -17,15 +17,15 @@ public class DummySensor extends AbstractSensor implements ActionListener{
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected double sens() {
+	protected double poll() {
 		if (getDelay() < 30000) {
 			setDelay(random.nextInt(2000) + getDelay());
 		}
 		return random.nextDouble();
 	}
-	
+
 	@Override
-  public void actionPerformed(ActionEvent e) {
-    Thread.currentThread().interrupt();
-  }
+	public void actionPerformed(ActionEvent e) {
+		Thread.currentThread().interrupt();
+	}
 }

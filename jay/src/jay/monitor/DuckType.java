@@ -28,11 +28,17 @@ public class DuckType implements InvocationHandler {
 		}
 		
 		public <T> T be(Class<T> interfaceClass) throws InvocationTargetException {
+			if (interfaceClass.isInstance(object)) {
+				return (T) object;
+			}
 			checkQuackLike(object, interfaceClass);
 			return implement(object, interfaceClass);
 		}
 		
 		public <T> T wannaBe(Class<T> interfaceClass) {
+			if (interfaceClass.isInstance(object)) {
+				return (T) object;
+			}
 			return implement(object, interfaceClass);
 		}
 		

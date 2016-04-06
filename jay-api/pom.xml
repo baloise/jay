@@ -4,9 +4,7 @@
 	<groupId>jay</groupId>
 	<artifactId>jay-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<properties>
-		<exec.mainClass>jay.monitor.Main</exec.mainClass>
-	</properties>
+	
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
@@ -19,32 +17,6 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.2</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<manifestEntries>
-										<Main-Class>${exec.mainClass}</Main-Class>
-									</manifestEntries>
-								</transformer>
-							</transformers>
-							<artifactSet>
-							</artifactSet>
-							<outputFile>${project.build.directory}/${project.artifactId}.jar</outputFile>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 </project>

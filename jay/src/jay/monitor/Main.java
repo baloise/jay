@@ -2,6 +2,9 @@ package jay.monitor;
 
 import static java.awt.Desktop.getDesktop;
 import static java.awt.Desktop.isDesktopSupported;
+import static java.util.Arrays.asList;
+import static jay.monitor.DuckType.does;
+import static jay.monitor.DuckType.let;
 
 import java.awt.AWTException;
 import java.awt.CheckboxMenuItem;
@@ -26,12 +29,16 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
 import jay.monitor.AutoHide.VISIBILITY;
+import jay.monitor.sensor.Configurable;
 import jay.monitor.sensor.DummySensor;
 import jay.monitor.sensor.Sensor;
 import jay.swing.ExceptionDialog;
@@ -51,8 +58,28 @@ public class Main implements PropertyChangeListener {
     private MenuItem homeItem;
     private MenuItem seperatorItem = new MenuItem("-");
     private boolean hideAfterInitialisation = System.getProperty("pin") == null;
-	private final ClassLoader classLoader = new JarFileLoader().withLibDir(homeDir);
+	private final ClassLoader classLoader = URLClassLoader.newInstance(getJarURLs(homeDir));
 
+	private static URL[] getJarURLs(File ... files) {
+		Set<URL> ret = new HashSet<>();
+		for (File file : files) {
+			if(file.isDirectory()) {
+				ret.addAll(asList(getJarURLs(file.listFiles(new FilenameFilter() {
+					public boolean accept(File dir, String name) {
+						return name.endsWith(".jar");
+					}
+				}))));
+			} else {
+				try {
+					ret.add(new URL("jar:file:" + file.getAbsolutePath() +"!/"));
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return ret.toArray(new URL[ret.size()]);
+	}
+	
 	public Main() {
 		SystemTray tray = SystemTray.getSystemTray();
 		trafficLight.setPercentage(36);
@@ -153,29 +180,23 @@ public class Main implements PropertyChangeListener {
 		String className = props.getProperty(CLASS);
 		try {
 			Class pluginClass = classLoader.loadClass(className);
-			Object plugin;
-			try {
-				Constructor constructor = pluginClass.getConstructor(Properties.class);
-				plugin = constructor.newInstance(props);
-			} catch (Exception e) {
-				System.err.println(e.getMessage());
-				try {
-					plugin = pluginClass.newInstance();
-				} catch (Exception e1) {
-					handleException(e1);
-					return;
-				}
+			Object plugin = pluginClass.newInstance();
+			if(does(plugin).quackLike(Configurable.class)) {
+				let(plugin).be(Configurable.class).configure(props);
 			}
-			Sensor sensor = wrapSensor(plugin);
-			addSensor(sensor);
-		} catch (ClassNotFoundException e) {
+			addSensor(wrapSensor(plugin));
+		} catch (Exception e) {
 			handleException(e);
 		}
 	}
 
 	private static Sensor wrapSensor(Object plugin) {
-		// TODO handle classcastexception with a wrapper
-		return (Sensor) plugin;
+		try {
+			return let(plugin).be(Sensor.class);
+		} catch (InvocationTargetException e) {
+			handleException(e);
+		}
+		return null;
 	}
 
 	private static void handleException(Exception e) {
@@ -200,6 +221,7 @@ public class Main implements PropertyChangeListener {
 	}
 
 	public void addSensor(final Sensor sensor) {
+		if(sensor == null) return;
 		sensor.addPropertyChangeListener(this);
 		SensorUI ui = new DefaultSensorUI(sensor);
 		frame.add(ui.getLabel());
@@ -233,9 +255,9 @@ public class Main implements PropertyChangeListener {
       @Override
       public void itemStateChanged(ItemEvent e) {
         stateListener.propertyChange(null);
-        if(sensor instanceof ActionListener) {
-          ((ActionListener) sensor).actionPerformed(null);
-        }
+        if(does(sensor).quackLike(ActionListener.class)) {
+ 	       let(sensor).wannaBe(ActionListener.class).actionPerformed(null);
+ 	    }
       }
     });
     sensor.addPropertyChangeListener(stateListener);

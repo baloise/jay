@@ -1,5 +1,8 @@
 package jay.monitor;
 
+import static jay.monitor.DuckType.does;
+import static jay.monitor.DuckType.let;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionListener;
@@ -22,12 +25,12 @@ public class SensorIcon extends JComponent implements PropertyChangeListener {
 	  @Override
 	  public void mouseClicked(MouseEvent e) {
 	    if(e.getClickCount() == 2) {
-	      if(sensor instanceof ActionListener) {
-	        ((ActionListener) sensor).actionPerformed(null);
+	      if(does(sensor).quackLike(ActionListener.class)) {
+	       let(sensor).wannaBe(ActionListener.class).actionPerformed(null);
 	      }
 	    }
 	  }
-  };
+	};
   
 	final Dimension dim = new Dimension(64, 64);
 	private TrafficLightIcon icon = new TrafficLightIcon(48).setComponent(this);
