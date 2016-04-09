@@ -9,7 +9,7 @@ import jay.monitor.sensor.Sensor;
 
 public abstract class AbstractSensor implements Sensor, Configurable {
 	protected PropertyChangeSupport propertyChange = new PropertyChangeSupport(this);
-	private String name;
+	protected String name;
 	private double value;
 
 	@Override
