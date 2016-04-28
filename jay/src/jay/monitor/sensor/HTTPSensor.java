@@ -9,7 +9,7 @@ import java.util.Properties;
 import jay.monitor.sensor.impl.AbstractPollingSensor;
 
 public class HTTPSensor extends AbstractPollingSensor implements ActionListener {
-	private URLSupport url;
+	private URLSupport url = new URLSupport();
 
 	@Override
 	public void configure(Properties props) {

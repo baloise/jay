@@ -10,7 +10,7 @@ import jay.monitor.sensor.impl.AbstractPollingSensor;
 public class JenkinsSensor extends AbstractPollingSensor implements ActionListener {
 
 	Jenkins jenkins;
-	private URLSupport url;
+	private URLSupport url = new URLSupport();
 
 	@Override
 	public void configure(Properties props) {
