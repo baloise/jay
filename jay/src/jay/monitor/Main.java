@@ -272,11 +272,13 @@ public class Main implements PropertyChangeListener {
 	}
 
 	public void setIconImage() {
-		double max = 0;
+		double min = 1D;
 		for (SensorUI ui : sensorUIs) {
-			max = Math.max(0, ui.getSensor().getValue());
+			double value = ui.getSensor().getValue();
+			min = Math.min(min, value);
 		}
-		trafficLight.blendToPercentage((int) (100 - 100D * max));
+		int percentage = (int) (100D * (1D-min));
+		trafficLight.blendToPercentage(percentage);
 	}
 
 	private void showBalloon(PropertyChangeEvent evt) {

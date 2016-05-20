@@ -13,6 +13,8 @@ class=jay.monitor.sensor.DummySensor
 
 This bulb would have the label Jay and the class DummySensor would implement the sensor logic. Each sensor runs in it's own deamon thread.
 
+Our wiki has documentation of [existing sensors and their configuration](./wiki/Sensor-Configuration).
+
 Use jay to build your own monitoring of whatever you want.
 
 # Some Screenshots
