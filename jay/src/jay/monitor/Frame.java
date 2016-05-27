@@ -47,7 +47,7 @@ public class Frame extends FancyDialog67 implements ActionListener {
 
 	private Image loadImage(String name) {
 		try {
-			return ImageIO.read(getClass().getResourceAsStream(name));
+			return ImageIO.read(getClass().getResourceAsStream("/"+name));
 		} catch (Exception e) {
 			try {
 				return Toolkit.getDefaultToolkit().getImage("res/"+name);
