@@ -9,7 +9,9 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -23,13 +25,13 @@ public class Frame extends FancyDialog67 implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	public final AutoHide autoHide;
-	private final Image pin;
+	private Image pin;
 	private final AlphaBlender blender;
 	private final static boolean IS_MAC = System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0;
 	
 	public Frame() {
 		autoHide = new AutoHide(this,4500);
-		pin = Toolkit.getDefaultToolkit().getImage("pin.png");
+		pin = loadImage("pin.png");
 		setMinimumSize(new Dimension(10, 10));
 		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -41,6 +43,18 @@ public class Frame extends FancyDialog67 implements ActionListener {
 		blender.addActionListener(this);
 		setWindowOpacity(0f);
 		super.show();
+	}
+
+	private Image loadImage(String name) {
+		try {
+			return ImageIO.read(getClass().getResourceAsStream(name));
+		} catch (Exception e) {
+			try {
+				return Toolkit.getDefaultToolkit().getImage("res/"+name);
+			} catch (Exception ex) {
+				 throw new IllegalStateException(ex);
+			 }
+		}
 	}
 	
 	@Override
