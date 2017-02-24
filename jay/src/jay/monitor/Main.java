@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
+import jay.JRE;
 import jay.monitor.AutoHide.VISIBILITY;
 import jay.monitor.sensor.Configurable;
 import jay.monitor.sensor.DummySensor;
@@ -55,6 +56,7 @@ public class Main implements PropertyChangeListener {
     private PopupMenu popupMenu;
     private MenuItem exitItem;
     private MenuItem homeItem;
+    private MenuItem restartItem;
     private MenuItem seperatorItem = new MenuItem("-");
     private boolean hideAfterInitialisation = System.getProperty("pin") == null;
 	private final ClassLoader classLoader = URLClassLoader.newInstance(getJarURLs(homeDir));
@@ -141,6 +143,17 @@ public class Main implements PropertyChangeListener {
 			popup.add(homeItem);
 		}
 
+		restartItem = new MenuItem("Restart");
+		restartItem.addActionListener((ae)->{
+			try {
+				JRE.spawn(getClass()).start();
+				exitListener.actionPerformed(null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		
 		return popup;
 	}
 
@@ -262,6 +275,7 @@ public class Main implements PropertyChangeListener {
     sensor.addPropertyChangeListener(stateListener);
     popupMenu.add(seperatorItem);
     popupMenu.add(homeItem);
+    popupMenu.add(restartItem);
     popupMenu.add(exitItem);
 	}
 
