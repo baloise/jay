@@ -18,7 +18,7 @@ public class TimeSensor extends AbstractPollingSensor {
 	}
 	
 	@Override
-	protected double poll() {
+	public double poll() {
 		switch (unit) {
 		case DAYS:
 			setDelaySecs(secondsUntilNextHour()+2);

@@ -25,7 +25,7 @@ public class JenkinsSensor extends AbstractPollingSensor implements ActionListen
 	}
 
 	@Override
-	protected double poll() {
+	public double poll() {
 		jenkins.update();
 		if (Color.green.equals(jenkins.color)) {
 			return 1;

@@ -17,7 +17,7 @@ public class DummySensor extends AbstractPollingSensor implements ActionListener
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected double poll() {
+	public double poll() {
 		if (getDelay() < 30000) {
 			setDelay(random.nextInt(2000) + getDelay());
 		}

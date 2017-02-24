@@ -26,7 +26,7 @@ public class HTTPSensor extends AbstractPollingSensor implements ActionListener 
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected double poll() {
+	public double poll() {
 		try {
 			HttpURLConnection con = (HttpURLConnection) url.getUrl().openConnection();
 			int responseCode = con.getResponseCode();
