@@ -14,7 +14,7 @@ public class TimeSensor extends AbstractPollingSensor {
 	public void configure(Properties props) {
 		name = props.getProperty("unit");
 		unit = TimeUnit.valueOf(name.toUpperCase()+"S");
-		setDelay(1000);
+		setDelaySecs(1000);
 	}
 	
 	@Override
