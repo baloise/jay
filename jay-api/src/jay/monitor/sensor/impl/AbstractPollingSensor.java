@@ -2,9 +2,10 @@ package jay.monitor.sensor.impl;
 
 import java.util.Properties;
 
+import jay.monitor.sensor.Delayed;
 import jay.monitor.sensor.Polling;
 
-public abstract class AbstractPollingSensor extends AbstractSensor implements Polling {
+public abstract class AbstractPollingSensor extends AbstractSensor implements Polling, Delayed {
 	
 	/**
 	 * Delay between two sens() calls in msec. Default is 60000 = 1 min.

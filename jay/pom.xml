@@ -9,6 +9,7 @@
 	</properties>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
+		<testSourceDirectory>srcTest</testSourceDirectory>
 		<resources>
 			<resource>
 				<directory>res</directory>
@@ -56,6 +57,12 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jay-api</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

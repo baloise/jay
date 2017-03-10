@@ -14,14 +14,15 @@ public abstract class AbstractSensor implements Sensor, Configurable {
 
 	@Override
 	public void configure(Properties props) {
+		if(props == null) return; 
 		name = props.getProperty("name");
-		if (name == null) {
-			name = getClass().getSimpleName();
-		}
 	}
 	
 	@Override
 	public String getName() {
+		if (name == null) {
+			name = getClass().getSimpleName();
+		}
 		return name;
 	}
 

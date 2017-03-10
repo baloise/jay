@@ -1,7 +1,7 @@
 package jay.monitor;
 
-import static jay.monitor.DuckType.does;
-import static jay.monitor.DuckType.let;
+import static jay.DuckType.does;
+import static jay.DuckType.let;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

@@ -2,8 +2,7 @@ package jay.monitor.sensor;
 
 import java.beans.PropertyChangeListener;
 
-public interface Sensor extends Runnable{
+public interface Sensor extends Runnable, Named {
 	void addPropertyChangeListener(PropertyChangeListener listener);
-	String getName();
 	double getValue();
 }

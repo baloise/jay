@@ -3,8 +3,8 @@ package jay.monitor;
 import static java.awt.Desktop.getDesktop;
 import static java.awt.Desktop.isDesktopSupported;
 import static java.util.Arrays.asList;
-import static jay.monitor.DuckType.does;
-import static jay.monitor.DuckType.let;
+import static jay.DuckType.does;
+import static jay.DuckType.let;
 
 import java.awt.AWTException;
 import java.awt.CheckboxMenuItem;
@@ -35,12 +35,17 @@ import java.net.URLClassLoader;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import jay.JRE;
 import jay.monitor.AutoHide.VISIBILITY;
 import jay.monitor.sensor.Configurable;
+import jay.monitor.sensor.Delayed;
 import jay.monitor.sensor.DummySensor;
+import jay.monitor.sensor.Named;
+import jay.monitor.sensor.Polling;
 import jay.monitor.sensor.Sensor;
+import jay.monitor.sensor.impl.AbstractPollingSensor;
 import jay.swing.ExceptionDialog;
 import jay.swing.TrafficLightIcon;
 
@@ -65,6 +70,11 @@ public class Main implements PropertyChangeListener {
 		Set<URL> ret = new HashSet<>();
 		for (File file : files) {
 			if(file.isDirectory()) {
+				try {
+					ret.add(file.toURI().toURL());
+				} catch (MalformedURLException e) {
+					handleException(e);
+				}
 				ret.addAll(asList(getJarURLs(file.listFiles(new FilenameFilter() {
 					public boolean accept(File dir, String name) {
 						return name.endsWith(".jar");
@@ -202,13 +212,43 @@ public class Main implements PropertyChangeListener {
 		}
 	}
 
-	private static Sensor wrapSensor(Object plugin) {
+	static Sensor wrapSensor(Object plugin) {
+		return wrapSensor(plugin, Main::handleException);
+	}
+	
+	static Sensor wrapSensor(Object plugin, Consumer<Exception> exceptionHandler) {
 		try {
-			return let(plugin).be(Sensor.class);
+			if(does(plugin).quackLike(Sensor.class)) {
+				return let(plugin).be(Sensor.class);
+			} else if(does(plugin).quackLike(Polling.class)){
+				final Polling polling = let(plugin).be(Polling.class);
+				final Named named = beOrNot(plugin, Named.class);
+				final Delayed delayed =  beOrNot(plugin, Delayed.class);
+				return new AbstractPollingSensor() {
+					@Override
+					public double poll() {
+						return polling.poll();
+					}
+					@Override
+					public String getName() {
+						return named == null ? super.getName() : named.getName();
+					}
+					@Override
+					public long getDelay() {
+						return delayed == null ? super.getDelay() : delayed.getDelay();
+					}
+				};
+			} else {
+				exceptionHandler.accept(new IllegalArgumentException(String.format("%s must be Polling or Sensor", plugin.getClass())));
+			}
 		} catch (InvocationTargetException e) {
-			handleException(e);
+			exceptionHandler.accept(e);
 		}
 		return null;
+	}
+
+	protected static <T> T  beOrNot(Object o, Class<T> clazz) throws InvocationTargetException {
+		return does(o).quackLike(clazz) ? let(o).be(clazz) : null;
 	}
 
 	private static void handleException(Exception e) {
