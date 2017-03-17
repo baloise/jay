@@ -43,3 +43,16 @@ echo powershell -Command Start-Process 'javaw.exe' '-cp "%userprofile%\jay.jar" 
 ```
 powershell -Command Start-Process 'javaw.exe' '-cp "%userprofile%\jay.jar" jay.monitor.Main' -NoNewWindow
 ```
+
+# Installation on Linux / Mac
+## Download the binary. 
+
+```
+printf "    __  __  _  _ \n  _(  )/ _\( \/ )\n / \) /    \)  / \n \____\_/\_(__/  \n\n"
+wget -O $HOME/.jay/jay.jar https://jitpack.io/com/github/baloise/jay/jay/-SNAPSHOT/jay--SNAPSHOT.jar
+```
+
+## Run
+```
+java -cp $HOME/.jay/jay.jar jay.monitor.Main &
+```
