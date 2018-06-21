@@ -5,8 +5,8 @@ echo / \) /    \)  /
 echo \____\_/\_(__/  
 echo.
 
-set JAY_VERSION=-SNAPSHOT
-call:download "https://jitpack.io/com/github/baloise/jay/jay/%JAY_VERSION%/jay-%JAY_VERSION%.jar" "%USERPROFILE%/jay.jar"
+if not exist %userprofile%\.jay mkdir %userprofile%\.jay
+call:download "http://jitpack.io/com/github/baloise/jay/jay/master/jay-master.jar" "%USERPROFILE%/.jay/jay.jar"
 
 ::--------------------------------------------------------
 ::-- Functions
