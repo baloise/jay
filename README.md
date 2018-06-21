@@ -36,12 +36,12 @@ You can look up the current jay version @ https://jitpack.io/com/github/baloise/
 
 ## Create start up item
 ```
-echo powershell -Command Start-Process 'javaw.exe' '-cp "%userprofile%\jay.jar" jay.monitor.Main' -NoNewWindow > "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\jay.bat"
+echo powershell -Command Start-Process 'javaw.exe' '-cp "%userprofile%\.jay\jay.jar" jay.monitor.Main' -NoNewWindow > "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\jay.bat"
 ```
 
 ## Run
 ```
-powershell -Command Start-Process 'javaw.exe' '-cp "%userprofile%\jay.jar" jay.monitor.Main' -NoNewWindow
+powershell -Command Start-Process 'javaw.exe' '-cp "%userprofile%\.jar\jay.jar" jay.monitor.Main' -NoNewWindow
 ```
 
 # Installation on Linux / Mac
