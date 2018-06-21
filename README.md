@@ -41,7 +41,7 @@ echo powershell -Command Start-Process 'javaw.exe' '-cp "%userprofile%\.jay\jay.
 
 ## Run
 ```
-powershell -Command Start-Process 'javaw.exe' '-cp "%userprofile%\.jar\jay.jar" jay.monitor.Main' -NoNewWindow
+powershell -Command Start-Process 'javaw.exe' '-cp "%userprofile%\.jay\jay.jar" jay.monitor.Main' -NoNewWindow
 ```
 
 # Installation on Linux / Mac
