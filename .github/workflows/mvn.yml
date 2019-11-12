@@ -9,8 +9,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: mvn build 
-      run:  mvn package
-    - name: mvn deploy
-      run: |
-         mvn deploy -DaltDeploymentRepository=github-packages::default::https://maven.pkg.github.com/baloise  -Dregistry=https://maven.pkg.github.com/baloise -Dtoken=${{ secrets.DEPLOY_TOKEN }}
+    - name: echo token
+      run:  |
+        echo ${{ secrets.DEPLOY_TOKEN }}
+        echo $DEPLOY_TOKEN
+        echo $secrets.DEPLOY_TOKEN
+#    - name: mvn build 
+#      run:  mvn package
+#    - name: mvn deploy
+#      run: |
+#         mvn deploy -DaltDeploymentRepository=github-packages::default::https://maven.pkg.github.com/baloise  -Dregistry=https://maven.pkg.github.com/baloise -Dtoken=${{ secrets.DEPLOY_TOKEN }}
