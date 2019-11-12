@@ -1,0 +1,14 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: mvn build & deploy
+      run: |
+         mvn package deploy -Dregistry=https://maven.pkg.github.com/baloise -Dtoken=${{ secrets.GITHUB_TOKEN }}
