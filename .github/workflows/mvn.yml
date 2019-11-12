@@ -11,4 +11,4 @@ jobs:
     - uses: actions/checkout@v1
     - name: mvn build & deploy
       run: |
-         mvn package deploy -Dregistry=https://maven.pkg.github.com/baloise -Dtoken=${{ secrets.GITHUB_TOKEN }}
+         mvn package deploy -DaltDeploymentRepository=github-packages::default::https://maven.pkg.github.com/baloise  -Dregistry=https://maven.pkg.github.com/baloise -Dtoken=${{ secrets.GITHUB_TOKEN }}
