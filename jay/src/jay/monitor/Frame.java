@@ -9,19 +9,17 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import jay.monitor.AutoHide.VISIBILITY;
-import jay.swing.FancyDialog67;
-import jay.swing.FancyFrame67;
 import jay.swing.AlphaBlender;
+import jay.swing.FancyDialog8;
 import jay.swing.PnutsLayout;
 
-public class Frame extends FancyDialog67 implements ActionListener {
+public class Frame extends FancyDialog8 implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	public final AutoHide autoHide;
@@ -41,7 +39,7 @@ public class Frame extends FancyDialog67 implements ActionListener {
 		add(new JLabel());
 		blender = new AlphaBlender(null,100);
 		blender.addActionListener(this);
-		setWindowOpacity(0f);
+		setOpacity(0f);
 		super.show();
 	}
 
@@ -65,7 +63,7 @@ public class Frame extends FancyDialog67 implements ActionListener {
 	public void setLocation() {
 		pack();
 		Insets insets = Toolkit.getDefaultToolkit().getScreenInsets(
-				FancyFrame67.getTranslucencyCapableGC());
+				FancyDialog8.getTranslucencyCapableGC());
 		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 		if(IS_MAC){
 			setLocation((int) size.getWidth() - insets.right - getWidth(),
@@ -104,6 +102,6 @@ public class Frame extends FancyDialog67 implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		setWindowOpacity(blender.getAlpha());
+		setOpacity(blender.getAlpha());
 	}
 }
