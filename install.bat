@@ -6,7 +6,7 @@ echo \____\_/\_(__/
 echo.
 
 if not exist %userprofile%\.jay mkdir %userprofile%\.jay
-call:download "http://jitpack.io/com/github/baloise/jay/jay/master/jay-master.jar" "%USERPROFILE%/.jay/jay.jar"
+call:download "http://jitpack.io/com/github/baloise/jay/jay/-SNAPSHOT/jay-SNAPSHOT.jar" "%USERPROFILE%/.jay/jay.jar"
 
 ::--------------------------------------------------------
 ::-- Functions
