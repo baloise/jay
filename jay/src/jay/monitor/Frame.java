@@ -39,7 +39,11 @@ public class Frame extends FancyDialog8 implements ActionListener {
 		add(new JLabel());
 		blender = new AlphaBlender(null,100);
 		blender.addActionListener(this);
-		setOpacity(0f);
+		try {
+			setOpacity(0f);
+		} catch (UnsupportedOperationException e) {
+			System.err.println(e.getMessage());
+		}
 		super.show();
 	}
 
