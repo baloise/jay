@@ -208,7 +208,7 @@ public class Main implements PropertyChangeListener {
 			}
 			addSensor(wrapSensor(plugin));
 		} catch (Exception e) {
-			handleException(e);
+			handleException(new IllegalArgumentException("Could not load " + cfgFile.getAbsolutePath(), e));
 		}
 	}
 
