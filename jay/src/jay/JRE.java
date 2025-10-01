@@ -19,8 +19,8 @@ import java.util.Map.Entry;
 public class JRE {
 
 	public static String jre() {
-		RuntimeMXBean mxbean = ManagementFactory.getPlatformMXBean(RuntimeMXBean.class);
-		String java = mxbean.getBootClassPath().split(quote(separator)+"lib",2)[0]+separator+"bin"+separator+"java";
+		String javaHome = System.getProperty("java.home");
+		String java = javaHome + separator + "bin" + separator + "java";
 		return new File(java).exists() ? java : java + "w.exe";
 	}
 	
