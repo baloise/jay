@@ -200,6 +200,10 @@ public class Main implements PropertyChangeListener {
 			return;
 		}
 		String className = props.getProperty(CLASS);
+		if(className == null) {
+			handleException(new IllegalArgumentException("Missing property 'class' in " + cfgFile.getAbsolutePath()));
+			return;
+		}
 		try {
 			Class pluginClass = classLoader.loadClass(className);
 			Object plugin = pluginClass.newInstance();
